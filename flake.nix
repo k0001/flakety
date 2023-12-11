@@ -100,6 +100,14 @@
                     hsLib.doJailbreak hself.tasty-hedgehog_1_4_0_2;
                   hedgehog-classes = hsLib.doJailbreak hsuper.hedgehog-classes;
 
+                  # For compatibility with 'tasty'
+                  tasty = hsLib.doJailbreak hself.tasty_1_5;
+                  tasty-quickcheck =
+                    hsLib.doJailbreak hself.tasty-quickcheck_0_10_3;
+                  integer-logarithms =
+                    hsLib.doJailbreak hsuper.integer-logarithms;
+                  time-compat = hsLib.doJailbreak hsuper.time-compat;
+
                   # Required by 'hpack'
                   http-client-tls = hself.http-client-tls_0_3_6_3;
 
