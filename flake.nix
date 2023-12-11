@@ -106,7 +106,10 @@
                     hsLib.doJailbreak hself.tasty-quickcheck_0_10_3;
                   integer-logarithms =
                     hsLib.doJailbreak hsuper.integer-logarithms;
+                  bitvec = hsLib.doJailbreak hsuper.bitvec;
                   time-compat = hsLib.doJailbreak hsuper.time-compat;
+                  indexed-traversable-instances =
+                    hsLib.doJailbreak hsuper.indexed-traversable-instances;
 
                   # Required by 'hpack'
                   http-client-tls = hself.http-client-tls_0_3_6_3;
