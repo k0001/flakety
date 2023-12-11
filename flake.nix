@@ -24,7 +24,7 @@
             packageOverrides = prev.lib.composeExtensions
               (prev.haskell.packageOverrides or (_: _: { })) (hself: hsuper:
                 prev.lib.optionalAttrs
-                (prev.lib.versionAtLeast hsuper.ghc.version "9.6") {
+                (prev.lib.versions.majorMinor hsuper.ghc.version == "9.6") {
                   # Extra features.
                   resourcet = hself.resourcet_1_3_0;
 
@@ -35,7 +35,10 @@
                   th-desugar = hself.callHackage "th-desugar" "1.15" { };
 
                 } // prev.lib.optionalAttrs
-                (prev.lib.versionAtLeast hsuper.ghc.version "9.8") {
+                (prev.lib.versions.majorMinor hsuper.ghc.version == "9.8") {
+                  # Extra features.
+                  resourcet = hself.resourcet_1_3_0;
+
                   ## Requiered updates:
 
                   # Tests don't compile
@@ -69,12 +72,16 @@
 
                   # For compatibility with GHC 9.8
                   doctest = hself.doctest_0_22_2;
+                  hedgehog = hself.hedgehog_1_4;
                   hspec = hself.hspec_2_11_7;
                   hspec-core = hself.hspec-core_2_11_7;
                   hspec-discover = hself.hspec-discover_2_11_7;
                   hspec-meta = hself.hspec-meta_2_11_7;
                   semigroupoids = hself.semigroupoids_6_0_0_1;
-                  hedgehog = hself.hedgehog_1_4;
+                  singletons-base = hself.singletons-base_3_3;
+                  singletons-th = hself.singletons-th_3_3;
+                  th-desugar = hself.th-desugar_1_16;
+                  turtle = hsLib.doJailbreak hsuper.turtle;
 
                   # For compatibility with 'hedgehog' and GHC 9.8
                   tasty-hedgehog =
