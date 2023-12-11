@@ -50,8 +50,10 @@
 
                   # Tests don't compile
                   lifted-base = hsLib.dontCheck hsuper.lifted-base;
-                  bsb-http-chunked = hsLib.dontCheck hsuper.bsb-http-chunked;
 
+                  # Tests don't compile, compatibility with GHC 9.8
+                  bsb-http-chunked =
+                    hsLib.doJailbreak (hsLib.dontCheck hsuper.bsb-http-chunked);
 
                   # For compatibility with 'th-abstraction'
                   bifunctors = hself.bifunctors_5_6_1;
@@ -91,10 +93,12 @@
                   th-abstraction = hself.th-abstraction_0_6_0_0;
                   th-desugar = hself.th-desugar_1_16;
                   turtle = hsLib.doJailbreak hsuper.turtle;
+                  generic-monoid = hsLib.doJailbreak hsuper.generic-monoid;
 
                   # For compatibility with 'hedgehog' and GHC 9.8
                   tasty-hedgehog =
                     hsLib.doJailbreak hself.tasty-hedgehog_1_4_0_2;
+                  hedgehog-classes = hsLib.doJailbreak hsuper.hedgehog-classes;
 
                   # Required by 'hpack'
                   http-client-tls = hself.http-client-tls_0_3_6_3;
