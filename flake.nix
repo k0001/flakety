@@ -43,13 +43,15 @@
 
                   ## Requiered updates:
 
+                  # broken
+                  streaming-conduit =
+                    hsLib.markUnbroken hsuper.streaming-conduit;
+                  cassava-conduit = hsLib.markUnbroken hsuper.cassava-conduit;
+
                   # Tests don't compile
                   lifted-base = hsLib.dontCheck hsuper.lifted-base;
                   bsb-http-chunked = hsLib.dontCheck hsuper.bsb-http-chunked;
 
-                  # For compatibility with 'template-haskell'
-                  th-abstraction = hself.th-abstraction_0_6_0_0;
-                  tagged = hsuper.tagged_0_8_8;
 
                   # For compatibility with 'th-abstraction'
                   bifunctors = hself.bifunctors_5_6_1;
@@ -73,6 +75,7 @@
                     });
 
                   # For compatibility with GHC 9.8
+                  attoparsec-iso8601 = hself.attoparsec-iso8601_1_1_0_1;
                   doctest = hself.doctest_0_22_2;
                   hedgehog = hself.hedgehog_1_4;
                   hspec = hself.hspec_2_11_7;
@@ -80,8 +83,12 @@
                   hspec-discover = hself.hspec-discover_2_11_7;
                   hspec-meta = hself.hspec-meta_2_11_7;
                   semigroupoids = hself.semigroupoids_6_0_0_1;
+                  singleton-bool = hself.singleton-bool_0_1_7;
                   singletons-base = hself.singletons-base_3_3;
                   singletons-th = hself.singletons-th_3_3;
+                  some = hself.some_1_0_6;
+                  tagged = hsuper.tagged_0_8_8;
+                  th-abstraction = hself.th-abstraction_0_6_0_0;
                   th-desugar = hself.th-desugar_1_16;
                   turtle = hsLib.doJailbreak hsuper.turtle;
 
