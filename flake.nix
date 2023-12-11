@@ -5,6 +5,10 @@
     nixpkgs.url =
       "github:NixOS/nixpkgs/933d7dc155096e7575d207be6fb7792bc9f34f6d";
     flake-parts.url = "github:hercules-ci/flake-parts";
+    singletons_3_2 = {
+      url = "github:goldfirere/singletons/singletons-th-base-3.2";
+      flake = false;
+    };
   };
 
   outputs = inputs@{ ... }:
@@ -23,6 +27,12 @@
                 (prev.lib.versionAtLeast hsuper.ghc.version "9.6") {
                   # Extra features.
                   resourcet = hself.resourcet_1_3_0;
+
+                  singletons-base = hself.callCabal2nix "singletons-base"
+                    "${inputs.singletons_3_2}/singletons-base" { };
+                  singletons-th = hself.callCabal2nix "singletons-th"
+                    "${inputs.singletons_3_2}/singletons-th" { };
+                  th-desugar = hself.callHackage "th-desugar" "1.15" { };
 
                 } // prev.lib.optionalAttrs
                 (prev.lib.versionAtLeast hsuper.ghc.version "9.8") {
