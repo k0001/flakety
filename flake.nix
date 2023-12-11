@@ -38,6 +38,8 @@
                 (prev.lib.versions.majorMinor hsuper.ghc.version == "9.8") {
                   # Extra features.
                   resourcet = hself.resourcet_1_3_0;
+                  pipes-safe = hsLib.doJailbreak
+                    (hself.callHackage "pipes-safe" "2.3.5" { });
 
                   ## Requiered updates:
 
