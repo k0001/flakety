@@ -40,6 +40,25 @@
                     "${inputs.singletons_3_2}/singletons-th" { };
                   th-desugar = hself.callHackage "th-desugar" "1.15" { };
 
+                  # Required by 'warp-tls'
+                  tls = hself.tls_1_9_0;
+
+                  # Required by 'warp-tls'. Tests disabled because of sandbox constraints.
+                  warp = hsLib.dontCheck hself.warp_3_3_30;
+
+                  # Required by 'hoogle'.
+                  warp-tls = hself.warp-tls_3_4_3;
+
+                  # For compatiblity with 'crypton-connection'
+                  http-client-tls = hself.http-client-tls_0_3_6_3;
+                  hoogle = (hsLib.appendPatch hsuper.hoogle (final.fetchpatch {
+                    name = "pr-406-patch.patch";
+                    url =
+                      "https://github.com/ndmitchell/hoogle/commit/b535bfe53ec44f3d7529867ce8d19d272eeeec9e.patch";
+                    sha256 =
+                      "sha256-//mLI7KoeNUgmWEE6z5y83ObR2tKw5DEWihvPCNzK1I=";
+                  })).override { connection = hself.crypton-connection; };
+
                 } // prev.lib.optionalAttrs
                 (prev.lib.versions.majorMinor hsuper.ghc.version == "9.8") {
                   # Extra features.
