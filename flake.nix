@@ -5,6 +5,12 @@
     nixpkgs.url =
       "github:NixOS/nixpkgs/933d7dc155096e7575d207be6fb7792bc9f34f6d";
     flake-parts.url = "github:hercules-ci/flake-parts";
+
+    hourglass = {
+      url = "github:k0001/hs-hourglass";
+      flake = false;
+    };
+
     singletons_3_2 = {
       url = "github:goldfirere/singletons/singletons-th-base-3.2";
       flake = false;
@@ -44,9 +50,11 @@
                   ## Requiered updates:
 
                   # broken
-                  streaming-conduit =
-                    hsLib.markUnbroken hsuper.streaming-conduit;
-                  cassava-conduit = hsLib.markUnbroken hsuper.cassava-conduit;
+                  streaming-conduit = hsLib.doJailbreak
+                    (hsLib.markUnbroken hsuper.streaming-conduit);
+                  cassava-conduit = hsLib.doJailbreak
+                    (hsLib.markUnbroken hsuper.cassava-conduit);
+                  hspec-api = hsLib.markUnbroken hsuper.hspec-api;
 
                   # Tests don't compile
                   lifted-base = hsLib.dontCheck hsuper.lifted-base;
@@ -67,18 +75,15 @@
                   http-conduit = hself.http-conduit_2_3_8_3;
 
                   # For compatibility with 'time'
-                  hourglass = hsLib.appendPatch hsuper.hourglass
-                    (final.fetchpatch {
-                      name = "hourglass-pr-56.patch";
-                      url =
-                        "https://github.com/vincenthz/hs-hourglass/commit/cfc2a4b01f9993b1b51432f0a95fa6730d9a558a.patch";
-                      sha256 =
-                        "sha256-gntZf7RkaR4qzrhjrXSC69jE44SknPDBmfs4z9rVa5Q=";
-                    });
+                  hourglass =
+                    hself.callCabal2nix "hourglass" inputs.hourglass { };
 
                   # For compatibility with GHC 9.8
                   attoparsec-iso8601 = hself.attoparsec-iso8601_1_1_0_1;
                   doctest = hself.doctest_0_22_2;
+                  generic-lens-core =
+                    hsLib.doJailbreak hsuper.generic-lens-core;
+                  generic-monoid = hsLib.doJailbreak hsuper.generic-monoid;
                   hedgehog = hself.hedgehog_1_4;
                   hspec = hself.hspec_2_11_7;
                   hspec-core = hself.hspec-core_2_11_7;
@@ -89,11 +94,27 @@
                   singletons-base = hself.singletons-base_3_3;
                   singletons-th = hself.singletons-th_3_3;
                   some = hself.some_1_0_6;
+                  streaming-bytestring =
+                    hsLib.doJailbreak hsuper.streaming-bytestring;
+                  pipes-bytestring = hsLib.doJailbreak hsuper.pipes-bytestring;
                   tagged = hsuper.tagged_0_8_8;
                   th-abstraction = hself.th-abstraction_0_6_0_0;
                   th-desugar = hself.th-desugar_1_16;
                   turtle = hsLib.doJailbreak hsuper.turtle;
-                  generic-monoid = hsLib.doJailbreak hsuper.generic-monoid;
+                  unlifted = hsLib.doJailbreak hsuper.unlifted;
+                  primitive-unlifted =
+                    hsLib.doJailbreak hsuper.primitive-unlifted;
+                  servant = hsLib.doJailbreak hself.servant_0_20_1;
+                  servant-server = hsLib.doJailbreak hself.servant-server_0_20;
+                  servant-client = hsLib.doJailbreak hself.servant-client_0_20;
+                  servant-client-core =
+                    hsLib.doJailbreak hself.servant-client-core_0_20;
+                  rebase = hself.rebase_1_20_1_1;
+                  rerebase = hself.rerebase_1_20_1_1;
+                  generic-lens = hsLib.doJailbreak hsuper.generic-lens;
+                  websockets = hsLib.doJailbreak hsuper.websockets;
+
+                  streaming-utils = hsLib.doJailbreak hsuper.streaming-utils;
 
                   # For compatibility with 'hedgehog' and GHC 9.8
                   tasty-hedgehog =
@@ -102,10 +123,14 @@
 
                   # For compatibility with 'tasty'
                   tasty = hsLib.doJailbreak hself.tasty_1_5;
+                  tasty-hspec = hsLib.doJailbreak hself.tasty-hspec_1_2_0_4;
+                  tasty-discover = hsLib.doJailbreak hsuper.tasty-discover;
                   tasty-quickcheck =
                     hsLib.doJailbreak hself.tasty-quickcheck_0_10_3;
                   integer-logarithms =
                     hsLib.doJailbreak hsuper.integer-logarithms;
+                  tdigest = hsLib.doJailbreak hsuper.tdigest;
+                  newtype-generics = hsLib.doJailbreak hsuper.newtype-generics;
                   bitvec = hsLib.doJailbreak hsuper.bitvec;
                   time-compat = hsLib.doJailbreak hsuper.time-compat;
                   indexed-traversable-instances =
