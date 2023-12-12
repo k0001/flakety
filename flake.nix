@@ -15,6 +15,17 @@
       url = "github:goldfirere/singletons/singletons-th-base-3.2";
       flake = false;
     };
+
+    hoogle = {
+      url = "github:ndmitchell/hoogle/0be38ee5e078e31ef7eabeaba255aed12ce7055d";
+      flake = false;
+    };
+
+    streaming-utils = {
+      url =
+        "github:k0001/streaming-utils/b7acc4dd0bf4ed6fb16fd4f4999bec24dfabceb3";
+      flake = false;
+    };
   };
 
   outputs = inputs@{ ... }:
@@ -51,13 +62,7 @@
 
                   # For compatiblity with 'crypton-connection'
                   http-client-tls = hself.http-client-tls_0_3_6_3;
-                  hoogle = (hsLib.appendPatch hsuper.hoogle (final.fetchpatch {
-                    name = "pr-406-patch.patch";
-                    url =
-                      "https://github.com/ndmitchell/hoogle/commit/b535bfe53ec44f3d7529867ce8d19d272eeeec9e.patch";
-                    sha256 =
-                      "sha256-//mLI7KoeNUgmWEE6z5y83ObR2tKw5DEWihvPCNzK1I=";
-                  })).override { connection = hself.crypton-connection; };
+                  hoogle = hself.callCabal2nix "hoogle" inputs.hoogle { };
 
                 } // prev.lib.optionalAttrs
                 (prev.lib.versions.majorMinor hsuper.ghc.version == "9.8") {
@@ -92,6 +97,9 @@
                   aeson-pretty = hself.aeson-pretty_0_8_10;
                   attoparsec-aeson = hself.attoparsec-aeson_2_2_0_1;
                   http-conduit = hself.http-conduit_2_3_8_3;
+                  streaming-utils =
+                    hself.callCabal2nix "streaming-utils" inputs.streaming-utils
+                    { };
 
                   # For compatibility with 'time'
                   hourglass =
@@ -133,8 +141,6 @@
                   generic-lens = hsLib.doJailbreak hsuper.generic-lens;
                   websockets = hsLib.doJailbreak hsuper.websockets;
 
-                  streaming-utils = hsLib.doJailbreak hsuper.streaming-utils;
-
                   # For compatibility with 'hedgehog' and GHC 9.8
                   tasty-hedgehog =
                     hsLib.doJailbreak hself.tasty-hedgehog_1_4_0_2;
@@ -168,13 +174,8 @@
                   warp-tls = hself.warp-tls_3_4_3;
 
                   # For compatiblity with 'crypton-connection'
-                  hoogle = (hsLib.appendPatch hsuper.hoogle (final.fetchpatch {
-                    name = "pr-406-patch.patch";
-                    url =
-                      "https://github.com/ndmitchell/hoogle/commit/b535bfe53ec44f3d7529867ce8d19d272eeeec9e.patch";
-                    sha256 =
-                      "sha256-//mLI7KoeNUgmWEE6z5y83ObR2tKw5DEWihvPCNzK1I=";
-                  })).override { connection = hself.crypton-connection; };
+                  hoogle = hself.callCabal2nix "hoogle" inputs.hoogle { };
+
                 });
           };
         });
