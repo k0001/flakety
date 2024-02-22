@@ -16,8 +16,24 @@
       flake = false;
     };
 
+    smtp-mail = {
+      url =
+        "github:MasterWordServices/smtp-mail/4c724c80814ab1da7c37256a6c10e04c88b9af95";
+      flake = false;
+    };
+
+    safe = {
+      url = "github:ndmitchell/safe/v0.3.21";
+      flake = false;
+    };
+
     hoogle = {
-      url = "github:ndmitchell/hoogle/0be38ee5e078e31ef7eabeaba255aed12ce7055d";
+      url = "github:ndmitchell/hoogle/v5.0.18.4";
+      flake = false;
+    };
+
+    cborg = {
+      url = "github:well-typed/cborg";
       flake = false;
     };
 
@@ -26,6 +42,7 @@
         "github:k0001/streaming-utils/b7acc4dd0bf4ed6fb16fd4f4999bec24dfabceb3";
       flake = false;
     };
+
   };
 
   outputs = inputs@{ ... }:
@@ -72,6 +89,11 @@
                     (hself.callHackage "pipes-safe" "2.3.5" { });
 
                   ## Requiered updates:
+                  megaparsec = hself.megaparsec_9_6_1;
+                  postgresql-simple =
+                    hsLib.doJailbreak (hself.postgresql-simple_0_7_0_0);
+                  postgresql-libpq =
+                    hsLib.doJailbreak (hself.postgresql-libpq_0_10_0_0);
 
                   # broken
                   streaming-conduit = hsLib.doJailbreak
@@ -108,6 +130,7 @@
                   # For compatibility with GHC 9.8
                   attoparsec-iso8601 = hself.attoparsec-iso8601_1_1_0_1;
                   doctest = hself.doctest_0_22_2;
+                  fgl = hsLib.doJailbreak hself.fgl_5_8_2_0;
                   generic-lens-core =
                     hsLib.doJailbreak hsuper.generic-lens-core;
                   generic-monoid = hsLib.doJailbreak hsuper.generic-monoid;
@@ -131,7 +154,11 @@
                   unlifted = hsLib.doJailbreak hsuper.unlifted;
                   primitive-unlifted =
                     hsLib.doJailbreak hsuper.primitive-unlifted;
+                  half = hsLib.doJailbreak hsuper.half;
                   servant = hsLib.doJailbreak hself.servant_0_20_1;
+                  servant-auth = hsLib.doJailbreak hsuper.servant-auth;
+                  servant-auth-server = hsLib.doJailbreak
+                    (hsLib.markUnbroken hsuper.servant-auth-server);
                   servant-server = hsLib.doJailbreak hself.servant-server_0_20;
                   servant-client = hsLib.doJailbreak hself.servant-client_0_20;
                   servant-client-core =
@@ -140,6 +167,16 @@
                   rerebase = hself.rerebase_1_20_1_1;
                   generic-lens = hsLib.doJailbreak hsuper.generic-lens;
                   websockets = hsLib.doJailbreak hsuper.websockets;
+                  cborg =
+                    hself.callCabal2nix "cborg" "${inputs.cborg}/cborg" { };
+                  cborg-json = hself.callCabal2nix "cborg-json"
+                    "${inputs.cborg}/cborg-json" { };
+                  serialise =
+                    hself.callCabal2nix "serialise" "${inputs.cborg}/serialise"
+                    { };
+                  binary-serialise-cbor =
+                    hself.callCabal2nix "binary-serialise-cbor"
+                    "${inputs.cborg}/binary-serialise-cbor" { };
 
                   # For compatibility with 'hedgehog' and GHC 9.8
                   tasty-hedgehog =
@@ -175,6 +212,9 @@
 
                   # For compatiblity with 'crypton-connection'
                   hoogle = hself.callCabal2nix "hoogle" inputs.hoogle { };
+                  safe = hself.callCabal2nix "safe" inputs.safe { };
+                  smtp-mail =
+                    hself.callCabal2nix "smtp-mail" inputs.smtp-mail { };
 
                 });
           };
