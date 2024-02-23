@@ -7,12 +7,12 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     hourglass = {
-      url = "github:k0001/hs-hourglass";
+      url = "github:k0001/hs-hourglass/cfc2a4b01f9993b1b51432f0a95fa6730d9a558a";
       flake = false;
     };
 
     singletons_3_2 = {
-      url = "github:goldfirere/singletons/singletons-th-base-3.2";
+      url = "github:goldfirere/singletons/f8a0708bf15289cc92a04c9902c3c2dc620a0b5e";
       flake = false;
     };
 
@@ -23,17 +23,23 @@
     };
 
     safe = {
-      url = "github:ndmitchell/safe/v0.3.21";
+      url = "github:ndmitchell/safe/748a635ed38582385a91c86a8847701f5ced63fd";
+      flake = false;
+    };
+
+    odd-jobs = {
+      url =
+        "github:saurabhnanda/odd-jobs/411d5d0aaeeb96d4b72d0a434b9d2b53c88c2eae";
       flake = false;
     };
 
     hoogle = {
-      url = "github:ndmitchell/hoogle/v5.0.18.4";
+      url = "github:ndmitchell/hoogle/ee364a4bbe6f4936162edb99d90e332f9f6bb9e9";
       flake = false;
     };
 
     cborg = {
-      url = "github:well-typed/cborg";
+      url = "github:well-typed/cborg/64e2201485df2e6f62dfa5b26c96b289609f6153";
       flake = false;
     };
 
@@ -96,11 +102,15 @@
                     hsLib.doJailbreak (hself.postgresql-libpq_0_10_0_0);
 
                   # broken
+                  odd-jobs = hsLib.dontCheck
+                    (hself.callCabal2nix "odd-jobs" inputs.odd-jobs { });
                   streaming-conduit = hsLib.doJailbreak
                     (hsLib.markUnbroken hsuper.streaming-conduit);
                   cassava-conduit = hsLib.doJailbreak
                     (hsLib.markUnbroken hsuper.cassava-conduit);
                   hspec-api = hsLib.markUnbroken hsuper.hspec-api;
+                  mmzk-typeid =
+                    hsLib.doJailbreak (hsLib.markUnbroken hsuper.mmzk-typeid);
 
                   # Tests don't compile
                   lifted-base = hsLib.dontCheck hsuper.lifted-base;
@@ -163,6 +173,8 @@
                   servant-client = hsLib.doJailbreak hself.servant-client_0_20;
                   servant-client-core =
                     hsLib.doJailbreak hself.servant-client-core_0_20;
+                  servant-static-th = hsLib.dontCheck
+                    (hsLib.markUnbroken hsuper.servant-static-th);
                   rebase = hself.rebase_1_20_1_1;
                   rerebase = hself.rerebase_1_20_1_1;
                   generic-lens = hsLib.doJailbreak hsuper.generic-lens;
