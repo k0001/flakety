@@ -7,12 +7,50 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     hourglass = {
-      url = "github:k0001/hs-hourglass/cfc2a4b01f9993b1b51432f0a95fa6730d9a558a";
+      url =
+        "github:k0001/hs-hourglass/cfc2a4b01f9993b1b51432f0a95fa6730d9a558a";
       flake = false;
     };
 
     singletons_3_2 = {
-      url = "github:goldfirere/singletons/f8a0708bf15289cc92a04c9902c3c2dc620a0b5e";
+      url =
+        "github:goldfirere/singletons/f8a0708bf15289cc92a04c9902c3c2dc620a0b5e";
+      flake = false;
+    };
+
+    headed-megaparsec = {
+      url =
+        "github:nikita-volkov/headed-megaparsec/3f4ef3d9ac30a1112cdc6cedd635bb01a9bb94a4";
+      flake = false;
+    };
+
+    postgresql-syntax = {
+      url =
+        "github:nikita-volkov/postgresql-syntax/7cae094d542df6b2b370c6f98e08dc33fcb7004d";
+      flake = false;
+    };
+
+    hasql = {
+      url =
+        "github:nikita-volkov/hasql/2334d8d686ee037721be89ed54506407e15ecde7";
+      flake = false;
+    };
+
+    hasql-th = {
+      url =
+        "github:nikita-volkov/hasql-th/2dbba60bc67645de4d04c8e7f5403e83bb742abf";
+      flake = false;
+    };
+
+    hasql-transaction = {
+      url =
+        "github:nikita-volkov/hasql-transaction/57a6ff13fbf83172b07ba72771c73a91faf81ab4";
+      flake = false;
+    };
+
+    hasql-pool = {
+      url =
+        "github:nikita-volkov/hasql-pool/e7400b9983f153b792974ba5818a672743cdadab";
       flake = false;
     };
 
@@ -95,11 +133,31 @@
                     (hself.callHackage "pipes-safe" "2.3.5" { });
 
                   ## Requiered updates:
+                  headed-megaparsec = hself.callCabal2nix "headed-megaparsec"
+                    inputs.headed-megaparsec { };
+                  postgresql-syntax = hself.callCabal2nix "postgresql-syntax"
+                    inputs.postgresql-syntax { };
+                  hasql = hsLib.dontCheck
+                    (hself.callCabal2nix "hasql" inputs.hasql { });
+                  hasql-transaction = hsLib.dontCheck
+                    (hself.callCabal2nix "hasql-transaction"
+                      inputs.hasql-transaction { });
+                  hasql-pool = hsLib.dontCheck
+                    (hself.callCabal2nix "hasql-pool" inputs.hasql-pool { });
+                  hasql-th = hself.callCabal2nix "hasql-th" inputs.hasql-th { };
+
                   megaparsec = hself.megaparsec_9_6_1;
                   postgresql-simple =
-                    hsLib.doJailbreak (hself.postgresql-simple_0_7_0_0);
+                    hsLib.doJailbreak hself.postgresql-simple_0_7_0_0;
                   postgresql-libpq =
-                    hsLib.doJailbreak (hself.postgresql-libpq_0_10_0_0);
+                    hsLib.doJailbreak hself.postgresql-libpq_0_10_0_0;
+                  postgresql-binary =
+                    hsLib.doJailbreak hsuper.postgresql-binary;
+                  isomorphism-class =
+                    hsLib.doJailbreak hsuper.isomorphism-class;
+                  text-builder = hsLib.doJailbreak hself.text-builder_0_6_7_2;
+                  text-builder-dev =
+                    hsLib.doJailbreak hself.text-builder-dev_0_3_4_2;
 
                   # broken
                   odd-jobs = hsLib.dontCheck
@@ -165,6 +223,9 @@
                   primitive-unlifted =
                     hsLib.doJailbreak hsuper.primitive-unlifted;
                   half = hsLib.doJailbreak hsuper.half;
+                  binary-parser = hsLib.doJailbreak hsuper.binary-parser;
+                  bytestring-tree-builder =
+                    hsLib.doJailbreak hsuper.bytestring-tree-builder;
                   servant = hsLib.doJailbreak hself.servant_0_20_1;
                   servant-auth = hsLib.doJailbreak hsuper.servant-auth;
                   servant-auth-server = hsLib.doJailbreak
@@ -175,6 +236,8 @@
                     hsLib.doJailbreak hself.servant-client-core_0_20;
                   servant-static-th = hsLib.dontCheck
                     (hsLib.markUnbroken hsuper.servant-static-th);
+                  servant-htmx =
+                    hsLib.doJailbreak (hsLib.markUnbroken hsuper.servant-htmx);
                   rebase = hself.rebase_1_20_1_1;
                   rerebase = hself.rerebase_1_20_1_1;
                   generic-lens = hsLib.doJailbreak hsuper.generic-lens;
