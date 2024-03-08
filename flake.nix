@@ -12,9 +12,20 @@
       flake = false;
     };
 
+    scotty = {
+      url = "github:scotty-web/scotty/66d60f7a6828c7e9f8c7d2dc49e9597e7278b982";
+      flake = false;
+    };
+
     singletons_3_2 = {
       url =
         "github:goldfirere/singletons/f8a0708bf15289cc92a04c9902c3c2dc620a0b5e";
+      flake = false;
+    };
+
+    esqueleto = {
+      url =
+        "github:bitemyapp/esqueleto/30a5e80736391e2aa45094f681d4bd329aa16707";
       flake = false;
     };
 
@@ -30,9 +41,21 @@
       flake = false;
     };
 
+    haskell-src-meta = {
+      url =
+        "github:haskell-party/haskell-src-meta/0b924b8bc4e0cf1aa254cd424d4107aa6d1bf4d7";
+      flake = false;
+    };
+
     hasql = {
       url =
         "github:nikita-volkov/hasql/2334d8d686ee037721be89ed54506407e15ecde7";
+      flake = false;
+    };
+
+    hasql-interpolate = {
+      url =
+        "github:awkward-squad/hasql-interpolate/e0f6ad326e320dbfd4eaf3339969a08e2e7555d5";
       flake = false;
     };
 
@@ -133,10 +156,13 @@
                     (hself.callHackage "pipes-safe" "2.3.5" { });
 
                   ## Requiered updates:
+                  scotty = hself.callCabal2nix "scotty" inputs.scotty { };
                   headed-megaparsec = hself.callCabal2nix "headed-megaparsec"
                     inputs.headed-megaparsec { };
                   postgresql-syntax = hself.callCabal2nix "postgresql-syntax"
                     inputs.postgresql-syntax { };
+                  haskell-src-meta = hself.callCabal2nix "haskell-src-meta"
+                    "${inputs.haskell-src-meta}/haskell-src-meta" { };
                   hasql = hsLib.dontCheck
                     (hself.callCabal2nix "hasql" inputs.hasql { });
                   hasql-transaction = hsLib.dontCheck
@@ -145,7 +171,14 @@
                   hasql-pool = hsLib.dontCheck
                     (hself.callCabal2nix "hasql-pool" inputs.hasql-pool { });
                   hasql-th = hself.callCabal2nix "hasql-th" inputs.hasql-th { };
+                  hasql-interpolate = hsLib.dontCheck
+                    (hself.callCabal2nix "hasql-interpolate"
+                      inputs.hasql-interpolate { });
 
+                  lucid-aria =
+                    hsLib.markUnbroken (hsLib.doJailbreak hsuper.lucid-aria);
+                  lucid-hyperscript = hsLib.markUnbroken
+                    (hsLib.doJailbreak hsuper.lucid-hyperscript);
                   megaparsec = hself.megaparsec_9_6_1;
                   postgresql-simple =
                     hsLib.doJailbreak hself.postgresql-simple_0_7_0_0;
@@ -212,8 +245,11 @@
                   singletons-base = hself.singletons-base_3_3;
                   singletons-th = hself.singletons-th_3_3;
                   some = hself.some_1_0_6;
+                  utf8-light = hsLib.doJailbreak hsuper.utf8-light;
                   streaming-bytestring =
                     hsLib.doJailbreak hsuper.streaming-bytestring;
+                  esqueleto = hsLib.dontCheck
+                    (hself.callCabal2nix "esqueleto" inputs.esqueleto { });
                   pipes-bytestring = hsLib.doJailbreak hsuper.pipes-bytestring;
                   tagged = hsuper.tagged_0_8_8;
                   th-abstraction = hself.th-abstraction_0_6_0_0;
@@ -257,6 +293,7 @@
                   tasty-hedgehog =
                     hsLib.doJailbreak hself.tasty-hedgehog_1_4_0_2;
                   hedgehog-classes = hsLib.doJailbreak hsuper.hedgehog-classes;
+                  alex = hself.alex_3_4_0_1;
 
                   # For compatibility with 'tasty'
                   tasty = hsLib.doJailbreak hself.tasty_1_5;
