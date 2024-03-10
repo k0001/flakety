@@ -182,6 +182,7 @@
                   megaparsec = hself.megaparsec_9_6_1;
                   postgresql-simple =
                     hsLib.doJailbreak hself.postgresql-simple_0_7_0_0;
+                  cookie-tray = hsLib.doJailbreak hsuper.cookie-tray;
                   postgresql-libpq =
                     hsLib.doJailbreak hself.postgresql-libpq_0_10_0_0;
                   postgresql-binary =
