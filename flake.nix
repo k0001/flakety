@@ -310,6 +310,7 @@
                   time-compat = hsLib.doJailbreak hsuper.time-compat;
                   indexed-traversable-instances =
                     hsLib.doJailbreak hsuper.indexed-traversable-instances;
+                  attoparsec-time = hsLib.doJailbreak hsuper.attoparsec-time;
 
                   # Required by 'hpack'
                   http-client-tls = hself.http-client-tls_0_3_6_3;
@@ -322,6 +323,8 @@
 
                   # Required by 'hoogle'.
                   warp-tls = hself.warp-tls_3_4_3;
+
+                  secp256k1-haskell = hself.secp256k1-haskell_1_1_0;
 
                   # For compatiblity with 'crypton-connection'
                   hoogle = hself.callCabal2nix "hoogle" inputs.hoogle { };
