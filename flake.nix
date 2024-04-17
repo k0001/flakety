@@ -6,6 +6,12 @@
       "github:NixOS/nixpkgs/933d7dc155096e7575d207be6fb7792bc9f34f6d";
     flake-parts.url = "github:hercules-ci/flake-parts";
 
+    attoparsec-time = {
+      url =
+        "github:nikita-volkov/attoparsec-time/7c97d3667249a76946d8792b269935245e8301da";
+      flake = false;
+    };
+
     hourglass = {
       url =
         "github:k0001/hs-hourglass/cfc2a4b01f9993b1b51432f0a95fa6730d9a558a";
@@ -310,7 +316,9 @@
                   time-compat = hsLib.doJailbreak hsuper.time-compat;
                   indexed-traversable-instances =
                     hsLib.doJailbreak hsuper.indexed-traversable-instances;
-                  attoparsec-time = hsLib.doJailbreak hsuper.attoparsec-time;
+                  attoparsec-time =
+                    hself.callCabal2nix "attoparsec-time" inputs.attoparsec-time
+                    { };
 
                   # Required by 'hpack'
                   http-client-tls = hself.http-client-tls_0_3_6_3;
