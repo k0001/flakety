@@ -302,6 +302,8 @@
                   hedgehog-classes = hsLib.doJailbreak hsuper.hedgehog-classes;
                   alex = hself.alex_3_4_0_1;
 
+                  criterion = hsLib.doJailbreak hsuper.criterion;
+
                   # For compatibility with 'tasty'
                   tasty = hsLib.doJailbreak hself.tasty_1_5;
                   tasty-hspec = hsLib.doJailbreak hself.tasty-hspec_1_2_0_4;
