@@ -18,6 +18,18 @@
       flake = false;
     };
 
+    stripeapi = {
+      url =
+        "github:Haskell-OpenAPI-Code-Generator/Stripe-Haskell-Library/b98f455f710c42bf8821a8c3d4e2c2aed7ff7a69";
+      flake = false;
+    };
+
+    dani-servant-lucid2 = {
+      url =
+        "github:danidiaz/dani-servant-lucid2/3fefaa24f7a38bcd385a0489167dc0d96e56db2e";
+      flake = false;
+    };
+
     scotty = {
       url = "github:scotty-web/scotty/66d60f7a6828c7e9f8c7d2dc49e9597e7278b982";
       flake = false;
@@ -185,6 +197,9 @@
                     hsLib.markUnbroken (hsLib.doJailbreak hsuper.lucid-aria);
                   lucid-hyperscript = hsLib.markUnbroken
                     (hsLib.doJailbreak hsuper.lucid-hyperscript);
+                  lucid2-htmx =
+                    hsLib.markUnbroken (hsLib.doJailbreak hsuper.lucid2-htmx);
+
                   megaparsec = hself.megaparsec_9_6_1;
                   postgresql-simple =
                     hsLib.doJailbreak hself.postgresql-simple_0_7_0_0;
@@ -273,6 +288,13 @@
                   servant-auth = hsLib.doJailbreak hsuper.servant-auth;
                   servant-auth-server = hsLib.doJailbreak
                     (hsLib.markUnbroken hsuper.servant-auth-server);
+                  servant-multipart =
+                    hsLib.doJailbreak hsuper.servant-multipart;
+                  servant-multipart-api =
+                    hsLib.doJailbreak hsuper.servant-multipart-api;
+                  servant-docs = hsLib.doJailbreak hself.servant-docs_0_13;
+                  servant-foreign =
+                    hsLib.doJailbreak hself.servant-foreign_0_16;
                   servant-server = hsLib.doJailbreak hself.servant-server_0_20;
                   servant-client = hsLib.doJailbreak hself.servant-client_0_20;
                   servant-client-core =
@@ -342,6 +364,12 @@
                   smtp-mail =
                     hself.callCabal2nix "smtp-mail" inputs.smtp-mail { };
 
+                  stripeapi =
+                    hself.callCabal2nix "stripeapi" inputs.stripeapi { };
+
+                  dani-servant-lucid2 = hsLib.doJailbreak
+                    (hself.callCabal2nix "dani-servant-lucid2"
+                      inputs.dani-servant-lucid2 { });
                 });
           };
         });
