@@ -237,6 +237,8 @@
                   aeson = hself.aeson_2_2_1_0;
                   free = hself.free_5_2;
 
+                  generics-sop = hself.generics-sop_0_5_1_4;
+
                   # For compatibility with 'aeson'
                   hpack = hself.hpack_0_36_0;
                   aeson-pretty = hself.aeson-pretty_0_8_10;
