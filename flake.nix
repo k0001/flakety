@@ -192,6 +192,8 @@
                   hasql-interpolate = hsLib.dontCheck
                     (hself.callCabal2nix "hasql-interpolate"
                       inputs.hasql-interpolate { });
+                  hasql-listen-notify =
+                    hsLib.doJailbreak hsuper.hasql-listen-notify;
 
                   lucid-aria =
                     hsLib.markUnbroken (hsLib.doJailbreak hsuper.lucid-aria);
