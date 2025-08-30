@@ -127,241 +127,197 @@
         in
         {
           haskell = prev.haskell // {
-            #    packageOverrides = prev.lib.composeExtensions
-            #      (prev.haskell.packageOverrides or (_: _: { })) (hself: hsuper:
-            #        prev.lib.optionalAttrs
-            #        (prev.lib.versions.majorMinor hsuper.ghc.version == "9.6") {
-            #          # Extra features.
-            #          resourcet = hself.resourcet_1_3_0;
+            packageOverrides = prev.lib.composeExtensions (prev.haskell.packageOverrides or (_: _: { })) (
+              hself: hsuper:
+              prev.lib.optionalAttrs (prev.lib.versions.majorMinor hsuper.ghc.version == "9.6") {
+                # Extra features.
+                resourcet = hself.resourcet_1_3_0;
 
-            #          singletons-base = hself.callCabal2nix "singletons-base"
-            #            "${inputs.singletons_3_2}/singletons-base" { };
-            #          singletons-th = hself.callCabal2nix "singletons-th"
-            #            "${inputs.singletons_3_2}/singletons-th" { };
-            #          th-desugar = hself.callHackage "th-desugar" "1.15" { };
+                singletons-base =
+                  hself.callCabal2nix "singletons-base" "${inputs.singletons_3_2}/singletons-base"
+                    { };
+                singletons-th = hself.callCabal2nix "singletons-th" "${inputs.singletons_3_2}/singletons-th" { };
+                th-desugar = hself.callHackage "th-desugar" "1.15" { };
 
-            #          # Required by 'warp-tls'
-            #          tls = hself.tls_1_9_0;
+                # Required by 'warp-tls'
+                tls = hself.tls_1_9_0;
 
-            #          # Required by 'warp-tls'. Tests disabled because of sandbox constraints.
-            #          warp = hsLib.dontCheck hself.warp_3_3_30;
+                # Required by 'warp-tls'. Tests disabled because of sandbox constraints.
+                warp = hsLib.dontCheck hself.warp_3_3_30;
 
-            #          # Required by 'hoogle'.
-            #          warp-tls = hself.warp-tls_3_4_3;
+                # Required by 'hoogle'.
+                warp-tls = hself.warp-tls_3_4_3;
 
-            #          # For compatiblity with 'crypton-connection'
-            #          http-client-tls = hself.http-client-tls_0_3_6_3;
-            #          hoogle = hself.callCabal2nix "hoogle" inputs.hoogle { };
+                # For compatiblity with 'crypton-connection'
+                http-client-tls = hself.http-client-tls_0_3_6_3;
+                hoogle = hself.callCabal2nix "hoogle" inputs.hoogle { };
 
-            #        } // prev.lib.optionalAttrs
-            #        (prev.lib.versions.majorMinor hsuper.ghc.version == "9.8") {
-            #          # Extra features.
-            #          resourcet = hself.resourcet_1_3_0;
-            #          pipes-safe = hsLib.doJailbreak
-            #            (hself.callHackage "pipes-safe" "2.3.5" { });
+              }
+              // prev.lib.optionalAttrs (prev.lib.versions.majorMinor hsuper.ghc.version == "9.8") {
+                # Extra features.
+                resourcet = hself.resourcet_1_3_0;
+                pipes-safe = hsLib.doJailbreak (hself.callHackage "pipes-safe" "2.3.5" { });
 
-            #          ## Requiered updates:
-            #          scotty = hself.callCabal2nix "scotty" inputs.scotty { };
-            #          headed-megaparsec = hself.callCabal2nix "headed-megaparsec"
-            #            inputs.headed-megaparsec { };
-            #          postgresql-syntax = hself.callCabal2nix "postgresql-syntax"
-            #            inputs.postgresql-syntax { };
-            #          haskell-src-meta = hself.callCabal2nix "haskell-src-meta"
-            #            "${inputs.haskell-src-meta}/haskell-src-meta" { };
-            #          hasql = hsLib.dontCheck
-            #            (hself.callCabal2nix "hasql" inputs.hasql { });
-            #          hasql-transaction = hsLib.dontCheck
-            #            (hself.callCabal2nix "hasql-transaction"
-            #              inputs.hasql-transaction { });
-            #          hasql-pool = hsLib.dontCheck
-            #            (hself.callCabal2nix "hasql-pool" inputs.hasql-pool { });
-            #          hasql-th = hself.callCabal2nix "hasql-th" inputs.hasql-th { };
-            #          hasql-interpolate = hsLib.dontCheck
-            #            (hself.callCabal2nix "hasql-interpolate"
-            #              inputs.hasql-interpolate { });
-            #          hasql-listen-notify =
-            #            hsLib.doJailbreak hsuper.hasql-listen-notify;
+                ## Requiered updates:
+                scotty = hself.callCabal2nix "scotty" inputs.scotty { };
+                headed-megaparsec = hself.callCabal2nix "headed-megaparsec" inputs.headed-megaparsec { };
+                postgresql-syntax = hself.callCabal2nix "postgresql-syntax" inputs.postgresql-syntax { };
+                haskell-src-meta =
+                  hself.callCabal2nix "haskell-src-meta" "${inputs.haskell-src-meta}/haskell-src-meta"
+                    { };
+                hasql = hsLib.dontCheck (hself.callCabal2nix "hasql" inputs.hasql { });
+                hasql-transaction = hsLib.dontCheck (
+                  hself.callCabal2nix "hasql-transaction" inputs.hasql-transaction { }
+                );
+                hasql-pool = hsLib.dontCheck (hself.callCabal2nix "hasql-pool" inputs.hasql-pool { });
+                hasql-th = hself.callCabal2nix "hasql-th" inputs.hasql-th { };
+                hasql-interpolate = hsLib.dontCheck (
+                  hself.callCabal2nix "hasql-interpolate" inputs.hasql-interpolate { }
+                );
+                hasql-listen-notify = hsLib.doJailbreak hsuper.hasql-listen-notify;
 
-            #          lucid-aria =
-            #            hsLib.markUnbroken (hsLib.doJailbreak hsuper.lucid-aria);
-            #          lucid-hyperscript = hsLib.markUnbroken
-            #            (hsLib.doJailbreak hsuper.lucid-hyperscript);
-            #          lucid2-htmx =
-            #            hsLib.markUnbroken (hsLib.doJailbreak hsuper.lucid2-htmx);
+                lucid-aria = hsLib.markUnbroken (hsLib.doJailbreak hsuper.lucid-aria);
+                lucid-hyperscript = hsLib.markUnbroken (hsLib.doJailbreak hsuper.lucid-hyperscript);
+                lucid2-htmx = hsLib.markUnbroken (hsLib.doJailbreak hsuper.lucid2-htmx);
 
-            #          megaparsec = hself.megaparsec_9_6_1;
-            #          postgresql-simple =
-            #            hsLib.doJailbreak hself.postgresql-simple_0_7_0_0;
-            #          cookie-tray = hsLib.doJailbreak hsuper.cookie-tray;
-            #          postgresql-libpq =
-            #            hsLib.doJailbreak hself.postgresql-libpq_0_10_0_0;
-            #          postgresql-binary =
-            #            hsLib.doJailbreak hsuper.postgresql-binary;
-            #          isomorphism-class =
-            #            hsLib.doJailbreak hsuper.isomorphism-class;
-            #          text-builder = hsLib.doJailbreak hself.text-builder_0_6_7_2;
-            #          text-builder-dev =
-            #            hsLib.doJailbreak hself.text-builder-dev_0_3_4_2;
+                megaparsec = hself.megaparsec_9_6_1;
+                postgresql-simple = hsLib.doJailbreak hself.postgresql-simple_0_7_0_0;
+                cookie-tray = hsLib.doJailbreak hsuper.cookie-tray;
+                postgresql-libpq = hsLib.doJailbreak hself.postgresql-libpq_0_10_0_0;
+                postgresql-binary = hsLib.doJailbreak hsuper.postgresql-binary;
+                isomorphism-class = hsLib.doJailbreak hsuper.isomorphism-class;
+                text-builder = hsLib.doJailbreak hself.text-builder_0_6_7_2;
+                text-builder-dev = hsLib.doJailbreak hself.text-builder-dev_0_3_4_2;
 
-            #          # broken
-            #          odd-jobs = hsLib.dontCheck
-            #            (hself.callCabal2nix "odd-jobs" inputs.odd-jobs { });
-            #          streaming-conduit = hsLib.doJailbreak
-            #            (hsLib.markUnbroken hsuper.streaming-conduit);
-            #          cassava-conduit = hsLib.doJailbreak
-            #            (hsLib.markUnbroken hsuper.cassava-conduit);
-            #          hspec-api = hsLib.markUnbroken hsuper.hspec-api;
-            #          mmzk-typeid =
-            #            hsLib.doJailbreak (hsLib.markUnbroken hsuper.mmzk-typeid);
+                # broken
+                odd-jobs = hsLib.dontCheck (hself.callCabal2nix "odd-jobs" inputs.odd-jobs { });
+                streaming-conduit = hsLib.doJailbreak (hsLib.markUnbroken hsuper.streaming-conduit);
+                cassava-conduit = hsLib.doJailbreak (hsLib.markUnbroken hsuper.cassava-conduit);
+                hspec-api = hsLib.markUnbroken hsuper.hspec-api;
+                mmzk-typeid = hsLib.doJailbreak (hsLib.markUnbroken hsuper.mmzk-typeid);
 
-            #          # Tests don't compile
-            #          lifted-base = hsLib.dontCheck hsuper.lifted-base;
+                # Tests don't compile
+                lifted-base = hsLib.dontCheck hsuper.lifted-base;
 
-            #          # Tests don't compile, compatibility with GHC 9.8
-            #          bsb-http-chunked =
-            #            hsLib.doJailbreak (hsLib.dontCheck hsuper.bsb-http-chunked);
+                # Tests don't compile, compatibility with GHC 9.8
+                bsb-http-chunked = hsLib.doJailbreak (hsLib.dontCheck hsuper.bsb-http-chunked);
 
-            #          # For compatibility with 'th-abstraction'
-            #          bifunctors = hself.bifunctors_5_6_1;
-            #          aeson = hself.aeson_2_2_1_0;
-            #          free = hself.free_5_2;
+                # For compatibility with 'th-abstraction'
+                bifunctors = hself.bifunctors_5_6_1;
+                aeson = hself.aeson_2_2_1_0;
+                free = hself.free_5_2;
 
-            #          generics-sop = hself.generics-sop_0_5_1_4;
+                generics-sop = hself.generics-sop_0_5_1_4;
 
-            #          # For compatibility with 'aeson'
-            #          hpack = hself.hpack_0_36_0;
-            #          aeson-pretty = hself.aeson-pretty_0_8_10;
-            #          attoparsec-aeson = hself.attoparsec-aeson_2_2_0_1;
-            #          http-conduit = hself.http-conduit_2_3_8_3;
-            #          streaming-utils =
-            #            hself.callCabal2nix "streaming-utils" inputs.streaming-utils
-            #            { };
+                # For compatibility with 'aeson'
+                hpack = hself.hpack_0_36_0;
+                aeson-pretty = hself.aeson-pretty_0_8_10;
+                attoparsec-aeson = hself.attoparsec-aeson_2_2_0_1;
+                http-conduit = hself.http-conduit_2_3_8_3;
+                streaming-utils = hself.callCabal2nix "streaming-utils" inputs.streaming-utils { };
 
-            #          # For compatibility with 'time'
-            #          hourglass =
-            #            hself.callCabal2nix "hourglass" inputs.hourglass { };
+                # For compatibility with 'time'
+                hourglass = hself.callCabal2nix "hourglass" inputs.hourglass { };
 
-            #          # For compatibility with GHC 9.8
-            #          attoparsec-iso8601 = hself.attoparsec-iso8601_1_1_0_1;
-            #          doctest = hself.doctest_0_22_2;
-            #          fgl = hsLib.doJailbreak hself.fgl_5_8_2_0;
-            #          generic-lens-core =
-            #            hsLib.doJailbreak hsuper.generic-lens-core;
-            #          generic-monoid = hsLib.doJailbreak hsuper.generic-monoid;
-            #          hedgehog = hself.hedgehog_1_4;
-            #          hspec = hself.hspec_2_11_7;
-            #          hspec-core = hself.hspec-core_2_11_7;
-            #          hspec-discover = hself.hspec-discover_2_11_7;
-            #          hspec-meta = hself.hspec-meta_2_11_7;
-            #          semigroupoids = hself.semigroupoids_6_0_0_1;
-            #          singleton-bool = hself.singleton-bool_0_1_7;
-            #          singletons-base = hself.singletons-base_3_3;
-            #          singletons-th = hself.singletons-th_3_3;
-            #          some = hself.some_1_0_6;
-            #          utf8-light = hsLib.doJailbreak hsuper.utf8-light;
-            #          streaming-bytestring =
-            #            hsLib.doJailbreak hsuper.streaming-bytestring;
-            #          esqueleto = hsLib.dontCheck
-            #            (hself.callCabal2nix "esqueleto" inputs.esqueleto { });
-            #          pipes-bytestring = hsLib.doJailbreak hsuper.pipes-bytestring;
-            #          tagged = hsuper.tagged_0_8_8;
-            #          th-abstraction = hself.th-abstraction_0_6_0_0;
-            #          th-desugar = hself.th-desugar_1_16;
-            #          turtle = hsLib.doJailbreak hsuper.turtle;
-            #          unlifted = hsLib.doJailbreak hsuper.unlifted;
-            #          primitive-unlifted =
-            #            hsLib.doJailbreak hsuper.primitive-unlifted;
-            #          half = hsLib.doJailbreak hsuper.half;
-            #          binary-parser = hsLib.doJailbreak hsuper.binary-parser;
-            #          bytestring-tree-builder =
-            #            hsLib.doJailbreak hsuper.bytestring-tree-builder;
-            #          servant = hsLib.doJailbreak hself.servant_0_20_1;
-            #          servant-auth = hsLib.doJailbreak hsuper.servant-auth;
-            #          servant-auth-server = hsLib.doJailbreak
-            #            (hsLib.markUnbroken hsuper.servant-auth-server);
-            #          servant-multipart =
-            #            hsLib.doJailbreak hsuper.servant-multipart;
-            #          servant-multipart-api =
-            #            hsLib.doJailbreak hsuper.servant-multipart-api;
-            #          servant-docs = hsLib.doJailbreak hself.servant-docs_0_13;
-            #          servant-foreign =
-            #            hsLib.doJailbreak hself.servant-foreign_0_16;
-            #          servant-server = hsLib.doJailbreak hself.servant-server_0_20;
-            #          servant-client = hsLib.doJailbreak hself.servant-client_0_20;
-            #          servant-client-core =
-            #            hsLib.doJailbreak hself.servant-client-core_0_20;
-            #          servant-static-th = hsLib.dontCheck
-            #            (hsLib.markUnbroken hsuper.servant-static-th);
-            #          servant-htmx =
-            #            hsLib.doJailbreak (hsLib.markUnbroken hsuper.servant-htmx);
-            #          rebase = hself.rebase_1_20_1_1;
-            #          rerebase = hself.rerebase_1_20_1_1;
-            #          generic-lens = hsLib.doJailbreak hsuper.generic-lens;
-            #          websockets = hsLib.doJailbreak hsuper.websockets;
-            #          cborg =
-            #            hself.callCabal2nix "cborg" "${inputs.cborg}/cborg" { };
-            #          cborg-json = hself.callCabal2nix "cborg-json"
-            #            "${inputs.cborg}/cborg-json" { };
-            #          serialise =
-            #            hself.callCabal2nix "serialise" "${inputs.cborg}/serialise"
-            #            { };
-            #          binary-serialise-cbor =
-            #            hself.callCabal2nix "binary-serialise-cbor"
-            #            "${inputs.cborg}/binary-serialise-cbor" { };
+                # For compatibility with GHC 9.8
+                attoparsec-iso8601 = hself.attoparsec-iso8601_1_1_0_1;
+                doctest = hself.doctest_0_22_2;
+                fgl = hsLib.doJailbreak hself.fgl_5_8_2_0;
+                generic-lens-core = hsLib.doJailbreak hsuper.generic-lens-core;
+                generic-monoid = hsLib.doJailbreak hsuper.generic-monoid;
+                hedgehog = hself.hedgehog_1_4;
+                hspec = hself.hspec_2_11_7;
+                hspec-core = hself.hspec-core_2_11_7;
+                hspec-discover = hself.hspec-discover_2_11_7;
+                hspec-meta = hself.hspec-meta_2_11_7;
+                semigroupoids = hself.semigroupoids_6_0_0_1;
+                singleton-bool = hself.singleton-bool_0_1_7;
+                singletons-base = hself.singletons-base_3_3;
+                singletons-th = hself.singletons-th_3_3;
+                some = hself.some_1_0_6;
+                utf8-light = hsLib.doJailbreak hsuper.utf8-light;
+                streaming-bytestring = hsLib.doJailbreak hsuper.streaming-bytestring;
+                esqueleto = hsLib.dontCheck (hself.callCabal2nix "esqueleto" inputs.esqueleto { });
+                pipes-bytestring = hsLib.doJailbreak hsuper.pipes-bytestring;
+                tagged = hsuper.tagged_0_8_8;
+                th-abstraction = hself.th-abstraction_0_6_0_0;
+                th-desugar = hself.th-desugar_1_16;
+                turtle = hsLib.doJailbreak hsuper.turtle;
+                unlifted = hsLib.doJailbreak hsuper.unlifted;
+                primitive-unlifted = hsLib.doJailbreak hsuper.primitive-unlifted;
+                half = hsLib.doJailbreak hsuper.half;
+                binary-parser = hsLib.doJailbreak hsuper.binary-parser;
+                bytestring-tree-builder = hsLib.doJailbreak hsuper.bytestring-tree-builder;
+                servant = hsLib.doJailbreak hself.servant_0_20_1;
+                servant-auth = hsLib.doJailbreak hsuper.servant-auth;
+                servant-auth-server = hsLib.doJailbreak (hsLib.markUnbroken hsuper.servant-auth-server);
+                servant-multipart = hsLib.doJailbreak hsuper.servant-multipart;
+                servant-multipart-api = hsLib.doJailbreak hsuper.servant-multipart-api;
+                servant-docs = hsLib.doJailbreak hself.servant-docs_0_13;
+                servant-foreign = hsLib.doJailbreak hself.servant-foreign_0_16;
+                servant-server = hsLib.doJailbreak hself.servant-server_0_20;
+                servant-client = hsLib.doJailbreak hself.servant-client_0_20;
+                servant-client-core = hsLib.doJailbreak hself.servant-client-core_0_20;
+                servant-static-th = hsLib.dontCheck (hsLib.markUnbroken hsuper.servant-static-th);
+                servant-htmx = hsLib.doJailbreak (hsLib.markUnbroken hsuper.servant-htmx);
+                rebase = hself.rebase_1_20_1_1;
+                rerebase = hself.rerebase_1_20_1_1;
+                generic-lens = hsLib.doJailbreak hsuper.generic-lens;
+                websockets = hsLib.doJailbreak hsuper.websockets;
+                cborg = hself.callCabal2nix "cborg" "${inputs.cborg}/cborg" { };
+                cborg-json = hself.callCabal2nix "cborg-json" "${inputs.cborg}/cborg-json" { };
+                serialise = hself.callCabal2nix "serialise" "${inputs.cborg}/serialise" { };
+                binary-serialise-cbor =
+                  hself.callCabal2nix "binary-serialise-cbor" "${inputs.cborg}/binary-serialise-cbor"
+                    { };
 
-            #          # For compatibility with 'hedgehog' and GHC 9.8
-            #          tasty-hedgehog =
-            #            hsLib.doJailbreak hself.tasty-hedgehog_1_4_0_2;
-            #          hedgehog-classes = hsLib.doJailbreak hsuper.hedgehog-classes;
-            #          alex = hself.alex_3_4_0_1;
+                # For compatibility with 'hedgehog' and GHC 9.8
+                tasty-hedgehog = hsLib.doJailbreak hself.tasty-hedgehog_1_4_0_2;
+                hedgehog-classes = hsLib.doJailbreak hsuper.hedgehog-classes;
+                alex = hself.alex_3_4_0_1;
 
-            #          criterion = hsLib.doJailbreak hsuper.criterion;
+                criterion = hsLib.doJailbreak hsuper.criterion;
 
-            #          # For compatibility with 'tasty'
-            #          tasty = hsLib.doJailbreak hself.tasty_1_5;
-            #          tasty-hspec = hsLib.doJailbreak hself.tasty-hspec_1_2_0_4;
-            #          tasty-discover = hsLib.doJailbreak hsuper.tasty-discover;
-            #          tasty-quickcheck =
-            #            hsLib.doJailbreak hself.tasty-quickcheck_0_10_3;
-            #          integer-logarithms =
-            #            hsLib.doJailbreak hsuper.integer-logarithms;
-            #          tdigest = hsLib.doJailbreak hsuper.tdigest;
-            #          newtype-generics = hsLib.doJailbreak hsuper.newtype-generics;
-            #          bitvec = hsLib.doJailbreak hsuper.bitvec;
-            #          time-compat = hsLib.doJailbreak hsuper.time-compat;
-            #          indexed-traversable-instances =
-            #            hsLib.doJailbreak hsuper.indexed-traversable-instances;
-            #          attoparsec-time =
-            #            hself.callCabal2nix "attoparsec-time" inputs.attoparsec-time
-            #            { };
+                # For compatibility with 'tasty'
+                tasty = hsLib.doJailbreak hself.tasty_1_5;
+                tasty-hspec = hsLib.doJailbreak hself.tasty-hspec_1_2_0_4;
+                tasty-discover = hsLib.doJailbreak hsuper.tasty-discover;
+                tasty-quickcheck = hsLib.doJailbreak hself.tasty-quickcheck_0_10_3;
+                integer-logarithms = hsLib.doJailbreak hsuper.integer-logarithms;
+                tdigest = hsLib.doJailbreak hsuper.tdigest;
+                newtype-generics = hsLib.doJailbreak hsuper.newtype-generics;
+                bitvec = hsLib.doJailbreak hsuper.bitvec;
+                time-compat = hsLib.doJailbreak hsuper.time-compat;
+                indexed-traversable-instances = hsLib.doJailbreak hsuper.indexed-traversable-instances;
+                attoparsec-time = hself.callCabal2nix "attoparsec-time" inputs.attoparsec-time { };
 
-            #          # Required by 'hpack'
-            #          http-client-tls = hself.http-client-tls_0_3_6_3;
+                # Required by 'hpack'
+                http-client-tls = hself.http-client-tls_0_3_6_3;
 
-            #          # Required by 'warp-tls'
-            #          tls = hself.tls_1_9_0;
+                # Required by 'warp-tls'
+                tls = hself.tls_1_9_0;
 
-            #          # Required by 'warp-tls'. Tests disabled because of sandbox constraints.
-            #          warp = hsLib.dontCheck hself.warp_3_3_30;
+                # Required by 'warp-tls'. Tests disabled because of sandbox constraints.
+                warp = hsLib.dontCheck hself.warp_3_3_30;
 
-            #          # Required by 'hoogle'.
-            #          warp-tls = hself.warp-tls_3_4_3;
+                # Required by 'hoogle'.
+                warp-tls = hself.warp-tls_3_4_3;
 
-            #          secp256k1-haskell = hself.secp256k1-haskell_1_1_0;
+                secp256k1-haskell = hself.secp256k1-haskell_1_1_0;
 
-            #          # For compatiblity with 'crypton-connection'
-            #          hoogle = hself.callCabal2nix "hoogle" inputs.hoogle { };
-            #          safe = hself.callCabal2nix "safe" inputs.safe { };
-            #          smtp-mail =
-            #            hself.callCabal2nix "smtp-mail" inputs.smtp-mail { };
+                # For compatiblity with 'crypton-connection'
+                hoogle = hself.callCabal2nix "hoogle" inputs.hoogle { };
+                safe = hself.callCabal2nix "safe" inputs.safe { };
+                smtp-mail = hself.callCabal2nix "smtp-mail" inputs.smtp-mail { };
 
-            #          stripeapi =
-            #            hself.callCabal2nix "stripeapi" inputs.stripeapi { };
+                stripeapi = hself.callCabal2nix "stripeapi" inputs.stripeapi { };
 
-            #          dani-servant-lucid2 = hsLib.doJailbreak
-            #            (hself.callCabal2nix "dani-servant-lucid2"
-            #              inputs.dani-servant-lucid2 { });
-            #        });
+                dani-servant-lucid2 = hsLib.doJailbreak (
+                  hself.callCabal2nix "dani-servant-lucid2" inputs.dani-servant-lucid2 { }
+                );
+              }
+              // prev.lib.optionalAttrs (prev.lib.versions.majorMinor hsuper.ghc.version == "9.12") { }
+            );
           };
         }
       );
