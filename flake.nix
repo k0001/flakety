@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url =
-      "github:NixOS/nixpkgs/933d7dc155096e7575d207be6fb7792bc9f34f6d";
+      "github:NixOS/nixpkgs/0f36c44e01a6129be94e3ade315a5883f0228a6e";
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     attoparsec-time = {
